@@ -8,10 +8,9 @@ _en cada uno de estos enpodpoints se podrá hacer los verbos;_ <br>
 _GET, POST, PUT, PATCH, DELETE_  <br> 
 
 #### LINKS
-* Postman collection: <br> 
+* Postman collection: 
     <small><strong>Podrás ver la collección o importarla</strong></small><br> 
 https://app.getpostman.com/run-collection/11209189-ee3021f5-6a9d-4804-bb22-97bbc696a6c0?action=collection%2Ffork&collection-url=entityId%3D11209189-ee3021f5-6a9d-4804-bb22-97bbc696a6c0%26entityType%3Dcollection%26workspaceId%3D8dce8d7c-f96c-43e8-977d-d503ff0f9911
-<br> 
 * Documentación en Swagger: <br> 
 https://app.swaggerhub.com/apis/soyglorialopez/api-rest/1.0.0
 

@@ -1,0 +1,1309 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "A simple api of app",
+    "version": "1.0.0",
+    "title": "API REST",
+    "contact": {
+      "email": "glorialopez.gelm@gmail.com"
+    }
+  },
+  "host": "virtserver.swaggerhub.com",
+  "basePath": "/soyglorialopez/api-rest/1.0.0",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "get all users",
+        "description": "By passing in the appropriate options, you can search  users or specific user\n",
+        "operationId": "/users/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/usersItem"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "get a specif user",
+        "description": "By passing in the appropriate id, you can searcha specific user\n",
+        "operationId": "/id/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "posts",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "comments",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/usersItem"
+              }
+            }
+          },
+          "401": {
+            "description": "Not Unauthorized to do this",
+            "schema": {
+              "$ref": "#/definitions/error401"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "users"
+        ],
+        "summary": "user update",
+        "description": "By passing in the appropriate options, you can update your profile\n",
+        "operationId": "upsert",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "in this section, the user could update your profile",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/body"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/userUpdateResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users"
+        ],
+        "summary": "user update",
+        "description": "By passing in the appropriate options, you can update your profile\n",
+        "operationId": "delete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/inline_response_200"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/user/createdPost": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "get all posts created from a specif user",
+        "description": "By passing in the appropriate option you can will get all posts created from a specific user",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/createdPostsItem"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/createdComments": {
+      "get": {
+        "tags": [
+          "users"
+        ],
+        "summary": "get all comments created from a specif user",
+        "description": "By passing in the appropriate option you can will get all comments created from a specific user",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/commentsCreatedItem"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/create": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "create a user",
+        "description": "By passing in the appropriate options, you can create a users \n",
+        "operationId": "create",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "name",
+            "description": "users Data to login",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/createUser"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/createItem"
+            }
+          },
+          "400": {
+            "description": "Incorrect Data",
+            "schema": {
+              "$ref": "#/definitions/error400"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/users/signIn": {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "user login",
+        "description": "By passing in the appropriate options, you can login in the app \n",
+        "operationId": "login",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "name",
+            "description": "Data users to login",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/userLogin"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/userLoginResponse"
+            }
+          },
+          "400": {
+            "description": "BadRequest",
+            "schema": {
+              "$ref": "#/definitions/error400"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error401"
+            }
+          }
+        }
+      }
+    },
+    "/posts": {
+      "get": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "get all posts",
+        "description": "in this endpoint you can get all posts\n",
+        "operationId": "/posts/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "postId",
+            "in": "query",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/allPostsResponse"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error400"
+            }
+          }
+        }
+      }
+    },
+    "/posts/last/{limit}": {
+      "get": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "get last posts",
+        "description": "in this endpoint you can get the amount specif that ypu want of posts\n",
+        "operationId": "/Last posts/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/allPostsResponse"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/posts/create": {
+      "post": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "create a posts",
+        "description": "By passing in the appropriate fields with values, you can create a post\n",
+        "operationId": "create-posts",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Fields",
+            "description": "post data to  create it",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/createPost"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/postsBody"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "put": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "update fields from a specifc post",
+        "description": "By passing in the appropriate options, you can update your post\n",
+        "operationId": "upsert post",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Fields",
+            "description": "post data to  create it",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/createPost"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/postsBody"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "delete a specifc post",
+        "description": "By passing in the appropriate options, you can delete your post\n",
+        "operationId": "delete a post",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/deletePost"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "posts"
+        ],
+        "summary": "update a specifc field",
+        "description": "in this endpoint, you can update a specif field of your post\n",
+        "operationId": "patch post",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "in": "body",
+            "name": "Fields",
+            "description": "post data to  update it",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/patchInPost"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/postsBody"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/comments": {
+      "get": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "get all comments",
+        "description": "in this endpoint you can get all comments\n",
+        "operationId": "/comments/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/allCommentsResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/comments/create": {
+      "post": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "create a comment",
+        "description": "By passing in the appropriate fields with values, you can create a comment\n",
+        "operationId": "create-comment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "Fields",
+            "description": "post data to  create it",
+            "required": false,
+            "schema": {
+              "$ref": "#/definitions/createComment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/CommentResponse"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/comments/{id}": {
+      "get": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "get a specif comment",
+        "description": "By passing in the appropriate id in params, you can get specific comment\n",
+        "operationId": "/id-comment/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CommentResponse"
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "comments"
+        ],
+        "summary": "delete a specifc comment",
+        "description": "By passing in the appropriate id in params, you can delete your comment\n",
+        "operationId": "delete-comment",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "results",
+            "schema": {
+              "$ref": "#/definitions/deleteComment"
+            }
+          },
+          "500": {
+            "description": "Internal Error",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "usersItem": {
+      "type": "object",
+      "required": [
+        "email",
+        "id",
+        "name",
+        "username"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "example": 12
+        },
+        "name": {
+          "type": "string",
+          "example": "Widget Adapter"
+        },
+        "username": {
+          "type": "string",
+          "example": "Bret"
+        },
+        "email": {
+          "type": "string",
+          "example": "Sincere124@gmail.com"
+        },
+        "addres": {
+          "$ref": "#/definitions/addresItem"
+        },
+        "phone": {
+          "type": "integer",
+          "example": 95845654
+        },
+        "website": {
+          "type": "string",
+          "format": "url",
+          "example": "ildegard.org"
+        },
+        "company": {
+          "$ref": "#/definitions/companyItem"
+        }
+      }
+    },
+    "addresItem": {
+      "type": "object",
+      "required": [
+        "city",
+        "street",
+        "suite"
+      ],
+      "properties": {
+        "street": {
+          "type": "string",
+          "example": "ACME Corpdoration"
+        },
+        "suite": {
+          "type": "string",
+          "format": "url",
+          "example": "https://www.acme-corp.com"
+        },
+        "city": {
+          "type": "string",
+          "example": "Gwenborough"
+        },
+        "zipcode": {
+          "type": "integer",
+          "example": "9584-5654"
+        },
+        "geo": {
+          "$ref": "#/definitions/addresItem_geo"
+        }
+      }
+    },
+    "companyItem": {
+      "type": "object",
+      "required": [
+        "bs",
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "omaguera-Crona"
+        },
+        "catchPrase": {
+          "type": "string",
+          "example": "ulti-layered client-server neural-ne"
+        },
+        "bs": {
+          "type": "string",
+          "example": "harness real-time e-market"
+        }
+      }
+    },
+    "createdPostsItem": {
+      "type": "object",
+      "required": [
+        "body",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "hjk"
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/postsBody"
+          }
+        }
+      }
+    },
+    "postsBody": {
+      "type": "object",
+      "required": [
+        "body",
+        "id",
+        "title",
+        "userId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "example": 1
+        },
+        "id": {
+          "type": "integer",
+          "example": 3
+        },
+        "title": {
+          "type": "string",
+          "example": "sunt aut facere almost"
+        },
+        "body": {
+          "type": "string",
+          "example": "repellat provident occaecati excepturi optio reprehe ge gloas the most"
+        }
+      }
+    },
+    "commentsCreatedItem": {
+      "type": "object",
+      "required": [
+        "body",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": ""
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/commentsBody"
+          }
+        }
+      }
+    },
+    "commentsBody": {
+      "type": "object",
+      "required": [
+        "body",
+        "id",
+        "userId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "example": 1
+        },
+        "id": {
+          "type": "integer",
+          "example": 3
+        },
+        "name": {
+          "type": "string",
+          "example": "id labore ex et quam laborum"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "Eliseo@gardner.biz"
+        },
+        "body": {
+          "type": "number",
+          "example": "laudantium enim quasi est quidem magnam voluptate ipsam eos\ntempora quo necessitatibus\ndolor "
+        }
+      }
+    },
+    "createUser": {
+      "type": "object",
+      "required": [
+        "email",
+        "name",
+        "username"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Widget Adapter"
+        },
+        "username": {
+          "type": "string",
+          "example": "Bret"
+        },
+        "email": {
+          "type": "string",
+          "example": "Sincere124@gmail.com"
+        },
+        "addres": {
+          "$ref": "#/definitions/addresItem"
+        },
+        "phone": {
+          "type": "integer",
+          "example": 95845654
+        },
+        "website": {
+          "type": "string",
+          "format": "url",
+          "example": "ildegard.org"
+        },
+        "company": {
+          "$ref": "#/definitions/companyItem"
+        }
+      }
+    },
+    "createItem": {
+      "type": "object",
+      "required": [
+        "body",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": ""
+        },
+        "body": {
+          "$ref": "#/definitions/createItem_body"
+        }
+      }
+    },
+    "userLogin": {
+      "type": "object",
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "Sincerece@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345678"
+        }
+      }
+    },
+    "userLoginResponse": {
+      "type": "object",
+      "required": [
+        "body",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": ""
+        },
+        "body": {
+          "type": "string",
+          "example": "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IlNpbmNlcmVAYXByaWwuYml6IiwicGFzc3dvcmQiOjEyMzQ1Njc4NCwiaWF0IjoxNjE5ODIzMTU3fQ.1Z7H-hM_kpRaJDmnOAunPBmNxlXYWg6mkd"
+        }
+      }
+    },
+    "userUpdateResponse": {
+      "type": "object",
+      "required": [
+        "body",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": ""
+        },
+        "body": {
+          "$ref": "#/definitions/userUpdateResponse_body"
+        }
+      }
+    },
+    "allPostsResponse": {
+      "type": "object",
+      "required": [
+        "body",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": ""
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/theBodyOfAllPosts"
+          }
+        }
+      }
+    },
+    "theBodyOfAllPosts": {
+      "type": "object",
+      "required": [
+        "body",
+        "id",
+        "title",
+        "userId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "example": 1
+        },
+        "id": {
+          "type": "integer",
+          "example": 3
+        },
+        "title": {
+          "type": "string",
+          "example": "sunt aut facere"
+        },
+        "body": {
+          "type": "string",
+          "example": "repellat provident occaecati excepturi optio reprehe ge gloas the most"
+        }
+      }
+    },
+    "createPost": {
+      "type": "object",
+      "required": [
+        "body",
+        "title",
+        "userId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "example": 1
+        },
+        "title": {
+          "type": "string",
+          "example": "sunt aut facere"
+        },
+        "body": {
+          "type": "string",
+          "example": "repellat provident occaecati excepturi optio reprehe ge gloas the most"
+        }
+      }
+    },
+    "patchInPost": {
+      "type": "object",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "sunt aut facere almost"
+        }
+      }
+    },
+    "deletePost": {
+      "type": "object",
+      "required": [
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "post with id 1 was removed"
+        }
+      }
+    },
+    "allCommentsResponse": {
+      "type": "object",
+      "required": [
+        "body",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": ""
+        },
+        "body": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/commentsBody"
+          }
+        }
+      }
+    },
+    "createComment": {
+      "type": "object",
+      "required": [
+        "body",
+        "title",
+        "userId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "example": 1
+        },
+        "title": {
+          "type": "string",
+          "example": "sunt aut facere almost"
+        },
+        "body": {
+          "type": "string",
+          "example": "repellat provident occaecati excepturi optio reprehe ge gloas the most"
+        }
+      }
+    },
+    "CommentResponse": {
+      "type": "object",
+      "required": [
+        "body",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": ""
+        },
+        "body": {
+          "$ref": "#/definitions/commentsBody"
+        }
+      }
+    },
+    "deleteComment": {
+      "type": "object",
+      "required": [
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "comment with id 1 was removed"
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "error",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "Internal server Error"
+        },
+        "error": {
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "error400": {
+      "type": "object",
+      "required": [
+        "error",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "Bad Request"
+        },
+        "error": {
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "error401": {
+      "type": "object",
+      "required": [
+        "error",
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "Not Unauthorized to do this"
+        },
+        "error": {
+          "type": "string",
+          "example": "Access token is missing or invalid"
+        }
+      }
+    },
+    "body": {
+      "type": "object",
+      "required": [
+        "email",
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Rita"
+        },
+        "email": {
+          "type": "string",
+          "example": "Rita@gmail.com"
+        }
+      }
+    },
+    "inline_response_200": {
+      "type": "object",
+      "required": [
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "example": "Deleted user with id 1"
+        },
+        "body": {
+          "type": "object",
+          "properties": {}
+        }
+      }
+    },
+    "addresItem_geo": {
+      "type": "object",
+      "required": [
+        "lat",
+        "lng"
+      ],
+      "properties": {
+        "lat": {
+          "type": "string",
+          "example": "-37.3159"
+        },
+        "lng": {
+          "type": "string",
+          "example": "81.1499"
+        }
+      }
+    },
+    "createItem_body": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        }
+      }
+    },
+    "userUpdateResponse_body": {
+      "type": "object",
+      "required": [
+        "email",
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "number",
+          "example": 1
+        },
+        "name": {
+          "type": "string",
+          "example": "Rita"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "example": "Rita@gmail.com"
+        }
+      }
+    }
+  }
+}

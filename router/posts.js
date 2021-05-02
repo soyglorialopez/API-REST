@@ -1,99 +1,73 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
-const {
-    getData,
-    upsert,
-   deleteData
-} = require('../utils/fetch');
+const response = require('../utils/response');
+const service = require('../services/posts');
+const postsService = new service() 
+
 
 router.get('/', async (req, res) => {
+   
     try {
-        const post = await getData(`posts`);
-        Object.keys(post) == 0 ?  res.status(200).json({
-            msg: "there aren't posts"
-        }) :  res.status(200).json(posts) 
+        const posts = await postsService.getAllPosts(req.query);
+        Object.keys(posts) == 0 ? response(res, '', 200, "there aren't posts",'') : response(res, '', 200, '', posts);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            msg: "Internal Error",
-            body: error
-        })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.get('/last/:limit', async (req, res) => {
-    try {        
-        const posts = await getData(`posts`);
-        posts.reverse();
-       let last = posts.slice(0, req.params.limit)
-        res.status(200).json(last) 
+    try {
+        const posts = await postsService.getAllPosts(req.params.limit);
+        response(res, '', 200, '', posts);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            msg: "Internal Error",
-            body: error
-        })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.post('/create', async (req, res) => {
     try {
-        const post = await upsert(
-            'posts',
-            'POST',
-            req.body,
-            { 'Content-type': 'application/json; charset=UTF-8' });
-        res.status(201).json(post);
+        const post = await postsService.create(req.body)
+        response(res, '', 201, '', post);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.put('/:id', async (req, res) => {
     req.body['id'] = req.params.id;
     try {
-        const post = await upsert(
-            `posts/${req.params.id}`,
-            'PUT',
-            req.body,
-            { 'Content-type': 'application/json; charset=UTF-8' });
-        res.status(200).json(post);
+        const post = await postsService.upsert(req.body)
+            response(res, '', 200, '', post);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.patch('/:id', async (req, res) => {
     req.body['id'] = req.params.id;
     try {
-        const post = await upsert(
-            `posts/${req.params.id}`,
-            'PATCH',
-            req.body,
-            { 'Content-type': 'application/json; charset=UTF-8' });
-        res.status(200).json(post);
+        const post = await postsService.patch(req.body);
+        response(res, '', 200, '', post);
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.delete('/:id', async (req, res) => {
     req.body['id'] = req.params.id;
     try {
-        const posts = await deleteData(
-            `posts/${req.params.id}`,
-            'DELETE'
-        );
-        res.status(201).json({
-            msg: `post with id ${req.params.id} deleted`
-        });
+        const posts = await postsService.delete(req.params.id);
+        response(res, '', 200,  `post with id ${req.params.id} was removed,`, '');
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 

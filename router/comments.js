@@ -1,68 +1,49 @@
 'use strict'
 const express = require('express');
 const router = express.Router();
-const {
-    getData,
-    postData
-} = require('../utils/fetch');
+const response = require('../utils/response');
+const service = require('../services/comments');
+const commentsService = new service() 
+
 
 router.post('/create', async (req, res) => {
     try {
-        const comment = await postData(
-            'comments',
-            'POST',
-            req.body,
-            { 'Content-type': 'application/json; charset=UTF-8' });
-        res.status(201).json(comment);
+        const comment = await commentsService.create(req.body)
+            response(res, '', 201, '', comment);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+         response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.get('/', async (req, res) => {
     try {
-        const comment = await getData(`comments`);
-        Object.keys(comment) == 0 ?  res.status(400).json({
-            msg: "Bad Request"
-        }) :  res.status(200).json(comment) 
+        const comments = await commentsService.getAllComments();
+         response(res, '', 200, '', comments);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            msg: "Internal Error",
-            body: error
-        })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.get('/:id', async (req, res) => {
     try {
-        const comment = await getData(`comments/${req.params.id}`);
-        Object.keys(comment) == 0 ?  res.status(400).json({
-            msg: "Bad Request"
-        }) :  res.status(200).json(comment) 
+        const comment = await commentsService.getSpecificComment(req.params.id);
+       response(res, '', 200, '', comment);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            msg: "Internal Error",
-            body: error
-        })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.delete('/:id', async (req, res) => {
     req.body['id'] = req.params.id;
     try {
-        const comment = await deleteData(
-            `comments/${req.params.id}`,
-            'DELETE'
-        );
-        res.status(201).json({
-            msg: `comment with id ${req.params.id} deleted`
-        });
+        const comment = await commentsService.delete(req.params.id);
+        response(res, '', 200,  `comment with id ${req.params.id} deleted`, '');
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+         response(res, error, 500, "Internal Server Error", '');
     };
 });
 module.exports = router

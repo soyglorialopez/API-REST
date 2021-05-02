@@ -1,134 +1,94 @@
 'use strict'
 const express = require('express');
-const { authToken } = require('../auth');
+const { authToken, auth } = require('../middleware/auth');
+
 const router = express.Router();
-const auth = require('../auth');
-const {
-    getData,
-    upsert,
-    deleteData
-} = require('../utils/fetch');
+const response = require('../utils/response');
+const service = require('../services/users');
+const userService = new service() 
 
 
 router.get('/', async (req, res) => {
+  
     try {
-        const users = await getData('users');
-        res.status(200).json(users);
+        const users = await userService.getAllUsers(req.query);
+        response(res, '', 200, '', users);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.get('/createdPosts', async (req, res) => {
     try {
-        const users = await getData(`posts?userId=${req.query.userId}`);
-        res.status(200).json(users);
+        const users = await userService.getPosts(req.query.userId);
+        response(res, '', 200, '', users);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.get('/createdComments', async (req, res) => {
     try {
-        const users = await getData(`comments?email=${req.query.email}`);
-        res.status(200).json(users);
+        const comments = await userService.getComments(req.query.email);
+        response(res, '', 200, '', comments);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
-router.get('/createdAlbums', async (req, res) => {
+router.get('/:id', auth(), async (req, res) => {
     try {
-        const users = await getData(`albums?userId=${req.query.userId}`);
-        res.status(200).json(users);
+        const users = await userService.getSpecificUser(req.query, req.params.id);
+        Object.keys(users[0]) == 0 ? response(res, '', 400, `id ${req.params.id} doesn't exist`, '') : response(res, '', 200, '', users);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
-    };
-});
-
-router.get('/:id', async (req, res) => {
-    if (req.query) {
-        let queries = [];
-        let url
-        for (const query in req.query) {
-            query != 'comments' ? url =`${query}?userId=${req.params.id}` : url = `${query}?email=${req.query[query]}`
-            try {
-                let data = await getData(url)
-                queries.push(data);
-            } catch (error) {
-                console.error(error);
-            };
-        };
-       return res.status(200).json(queries)
-    };
-    try {
-        const users = await getData(`users/${req.params.id}`);
-        Object.keys(users) == 0 ? res.status(400).json({
-            msg: `id ${req.params.id} doesn't exist`
-        }) : res.status(200).json(users);
-    } catch (error) {
-        console.error(error);
-        res.status(400).json({
-            msg: "Internal Error",
-            body: error
-        });
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.post('/create/', async (req, res) => {
     try {
-        const user = await upsert(
-            'users',
-            'POST',
-            req.body,
-            { 'Content-type': 'application/json; charset=UTF-8' });
-        res.status(201).json(user);
+        const user = await userService.create(req.body)
+            return response(res, '', 201, '', user);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
-router.post('/signIn',  async (req, res) => {
+router.post('/signIn', async (req, res) => {
     try {
-        let token = await authToken(req.body);
-        console.log(token)
+        let token = await authToken(req.body, res);
+        return response(res, '', 200, '', token);
     } catch (error) {
-        // console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        console.error(error);
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.put('/:id', async (req, res) => {
     req.body['id'] = req.params.id;
     try {
-        const user = await upsert(
-            `users/${req.params.id}`,
-            'PUT',
-            req.body,
-            { 'Content-type': 'application/json; charset=UTF-8' });
-        res.status(200).json(user);
+        const user = await userService.upsert( req.body);
+            return response(res, '', 200, '', user);
+       
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" });
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
 router.delete('/:id', async (req, res) => {
     req.body['id'] = req.params.id;
     try {
-        const user = await deleteData(
-            `users/${req.params.id}`,
-            'DELETE'
-        );
-        res.status(201).json(user);
+        const user = await userService.delete(req.params.id);
+        return response(res, '', 200, `deleted user with id ${req.params.id}`, user);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal Error" })
+        response(res, error, 500, "Internal Server Error", '');
     };
 });
 
